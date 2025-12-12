@@ -138,12 +138,17 @@
       record_data: false
     };
 
-    var distractorTask = createStroopTask(jsPsych);
+
 
     //指导语 <p style='font-size:30px;font-weight:bold'>你认为视频中的人是否可信？</p>
     var block1_procedure = getBlock1Procedure(jsPsych, Videos);
     var block2_procedure = getBlock2Procedure(jsPsych, Videos);
     var block3_procedure = getBlock3Procedure(jsPsych, Videos);
+
+    var pacmanEndCallback = function(state) {
+        gameState = state;
+        jsPsych.finishTrial({ gameState: state });
+    };
 
     timeline.push(trial_fullscreen);
     timeline.push(instruction_trial);
@@ -165,3 +170,4 @@
     </script>
 </body>
 </html>
+
