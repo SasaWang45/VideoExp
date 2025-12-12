@@ -16,59 +16,103 @@ function getBlock1Procedure(jsPsych, Videos) {
     var video_paths_block1 = block1_stims.map(function(stim) {
         return stim.Video;  // Prepend directory if needed; remove './Videos_exp/' if videos are in current dir
     });
-    
-    // 在时间线变量中视频刺激preload
-    var preload_videos = {
-        type: jsPsychPreload,
-        videos: video_paths_block1,
-        show_progress_bar: true,
-        continue_after_error: false,
-        error_message: '视频加载失败，请检查网络连接后重试。'
-    };
 
-    var trial_credibility = {
-        type: jsPsychVideoButtonResponse,
-        autoplay: true,
-        controls: false,
-        width: 1000,
-        stimulus: jsPsych.evaluateTimelineVariable('Video'),
-        prompt: `<p style='font-size:30px'>您认为该视频<b>是</b>或<b>否</b>可信？</p>`,
-        choices: ["可信", "不可信"],
-        button_label: "提交",
-        require_movement: true,
-        response_ends_trial: true,
-        response_allowed_while_playing: true,
+    // 整合版
+    var trial_credibility_conbination = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function() {
+            // 构建包含视频和提示的HTML
+            return `
+                <div style="text-align: center;">
+                    <video 
+                        id="video-stimulus" 
+                        width="1000" 
+                        height="500"
+                        autoplay
+                        muted
+                        style="display: block; margin: 0 auto;">
+                        <source src="${jsPsych.evaluateTimelineVariable('Video')}" type="video/mp4">
+                        您的浏览器不支持视频播放。
+                    </video>
+                    <p style='font-size:30px; margin-top: 20px;'>
+                        从面孔上看，您认为该视频中的人<b>是</b>或<b>否</b>值得相信？
+                    </p>
+                </div>
+                    <div style="margin-top: 30px; font-size: 30px; line-height: 1;">
+                    <p><b>提示：</b>请在下方<b>1-7</b> 对该视频中的人值得/不值得相信<b>程度</b>评分</p>
+                </div>
+                
+                <div style="margin-top: 30px; font-size: 24px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #f5f5f5;">
+                                <b>1</b><br>非常不相信
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #f0f0f0;">
+                                <b>2</b><br>不相信
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #ebebeb;">
+                                <b>3</b><br>有点不相信
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #e6e6e6;">
+                                <b>4</b><br>中等
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #e1e1e1;">
+                                <b>5</b><br>有点相信
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #dcdcdc;">
+                                <b>6</b><br>相信
+                            </td>
+                            <td style="text-align: center; padding: 10px; border: 1px solid #ccc; background-color: #d7d7d7;">
+                                <b>7</b><br>非常相信
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+        },
+        choices: ['1', '2', '3', '4', '5', '6', '7'],
+        prompt: "", // prompt已整合到stimulus中
         data: {
             task: "learning_phase",
             VideoID: jsPsych.timelineVariable('ID'),
             Authenticity: jsPsych.timelineVariable('Authenticity'),
             Familiarity: jsPsych.timelineVariable('Familiarity')
+        },
+        on_load: function() {
+            // 确保视频自动播放
+            var video = document.getElementById('video-stimulus');
+            if (video) {
+                video.play().catch(function(e) {
+                    console.log("自动播放被阻止:", e);
+                });
+            }
+        },
+        on_finish: function(data) {
+        // 将按键值转换为数字并存储在数据中
+        if (data.response) {
+            data.confidence_rating = parseInt(data.response);
         }
+        var video = document.getElementById('video-stimulus');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+            return data;
+        },
+        
+    // 添加按键反馈
+        on_start: function() {
+            // 存储当前试次的ID，以便在按键事件中更新显示
+            this.trial_id = jsPsych.timelineVariable('ID');
+        }
+
+
     };
 
-    var trial_credibility_confidence = {
-        type: jsPsychVideoSliderResponse,
-        autoplay: false,
-        controls: false,
-        width: 1000,
-        stimulus: jsPsych.evaluateTimelineVariable('Video'),
-        prompt: `<p style='font-size:30px'>您认为该视频的可信/不可信<b>程度</b>有多大？
-        <br>请注意，滑动条最左端为50%，最右端为100%，代表您对刚刚所做判断的<b>程度</b>。</p>`,
-        labels: ["<span style='font-size':30px'>50%</span>", "<span style='font-size':25px'>100%</span>"],
-        button_label: "提交",
-        require_movement: true,
-        response_ends_trial: true,
-        response_allowed_while_playing: true,
-        data: {
-            task: "learning_phase",
-            VideoID: jsPsych.timelineVariable('ID'),
-            Authenticity: jsPsych.timelineVariable('Authenticity'),
-            Familiarity: jsPsych.timelineVariable('Familiarity')
-        }
-    };
 
     var block1_procedure = {
-        timeline: [trial_fixation, trial_credibility,trial_credibility_confidence   ],
+        timeline: [trial_fixation, trial_credibility_conbination],
         timeline_variables: block1_stims,  // 直接传入过滤后的数组
         randomize_order: true,
         repetitions: 1,
