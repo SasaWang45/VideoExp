@@ -31,7 +31,7 @@ function getBlock1Procedure(jsPsych, Videos) {
         autoplay: true,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您认为该视频<b>是</b>或<b>否</b>可信？</p>`,
         choices: ["可信", "不可信"],
         button_label: "提交",
@@ -51,7 +51,7 @@ function getBlock1Procedure(jsPsych, Videos) {
         autoplay: false,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您认为该视频的可信/不可信<b>程度</b>有多大？
         <br>请注意，滑动条最左端为50%，最右端为100%，代表您对刚刚所做判断的<b>程度</b>。</p>`,
         labels: ["<span style='font-size':30px'>50%</span>", "<span style='font-size':25px'>100%</span>"],
@@ -77,4 +77,5 @@ function getBlock1Procedure(jsPsych, Videos) {
     }
 };
        return block1_procedure;
+
 }
