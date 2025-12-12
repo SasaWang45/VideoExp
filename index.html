@@ -3,24 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepfakeFalseMemoryWithoutEyeTrackingPacman</title>
+    <title>DeepfakeFalseMemoryWithoutEyeTracking</title>
     <script src="https://unpkg.com/jspsych@latest"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@latest"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-video-slider-response@latest"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-video-button-response@latest"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@latest"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@latest"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@latest"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-instructions@latest"></script>
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@latest" type="text/javascript"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@latest"></script>
     <script src="./Videos.js"></script>
     <script src="./Instructions.js"></script>
     <script src="./Block1_LearningPhase.js"></script>
     <script src="./Block2_IdentificationPhase.js"></script>
     <script src="./Block3_RecognitionPhase.js"></script>
-    <script src="./Mazelevel.js"></script>
-    <script src="./Pacman.js"></script>
+    <script src="./Stroop.js"></script>
 
     <link
       rel="stylesheet"
@@ -85,6 +79,9 @@
     //       on_interaction_data_update: function(data) {
     // console.log(JSON.stringify(data));},
         // show_progress_bar: true,
+      on_error: function(e) {
+        console.error('jsPsych error:', e);
+      },
       on_finish: function() {
         // 获取人口学变量值
         let demographics_data = jsPsych.data.get().filter({
@@ -141,30 +138,28 @@
       record_data: false
     };
 
+    var distractorTask = createStroopTask(jsPsych);
+
     //指导语 <p style='font-size:30px;font-weight:bold'>你认为视频中的人是否可信？</p>
     var block1_procedure = getBlock1Procedure(jsPsych, Videos);
     var block2_procedure = getBlock2Procedure(jsPsych, Videos);
     var block3_procedure = getBlock3Procedure(jsPsych, Videos);
-
-    var pacmanEndCallback = function(state) {
-        gameState = state;
-        jsPsych.finishTrial({ gameState: state });
-    };
-
 
     timeline.push(trial_fullscreen);
     timeline.push(instruction_trial);
     timeline.push(trial_demographics);
     timeline.push(instructions_1);
     timeline.push(block1_procedure);
-    timeline.push(instruction_distractor);
-    timeline.push(trial_distractor);
+    timeline.push(instruction_distractor)
+    timeline.push(distractorTask);
     timeline.push(instructions_2);
     timeline.push(block2_procedure);
-    timeline.push(instruction_distractor);
-    timeline.push(trial_distractor);
+    timeline.push(instruction_distractor)
+    timeline.push(distractorTask);
     timeline.push(instructions_3);
     timeline.push(block3_procedure);
+    timeline.push(instructions_check);
+
 
     jsPsych.run(timeline);
     </script>
