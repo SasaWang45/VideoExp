@@ -26,7 +26,7 @@ function getBlock3Procedure(jsPsych, Videos) {
         autoplay: true,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您<b>是</b>或<b>否</b>记忆过视频中的这个人。</p>`,
         choices: ["记忆过", "没记忆"],
         require_movement: true,
@@ -43,7 +43,7 @@ function getBlock3Procedure(jsPsych, Videos) {
         autoplay: false,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您对您刚才做出的选择有多大程度的<b>自信</b>？</p>
         <p style='font-size:20px'>如果<b>非常自信</b>，请将滑块移向<b>右侧</b>；如果<b>不确定</b>，请将滑块移向<b>左侧</b>。
         <br>请注意，滑动条最左端为<b>50%</b>，最右端为<b>100%</b>，代表您对刚刚所做判断的<b>程度</b>。</p>`,
@@ -65,7 +65,7 @@ function getBlock3Procedure(jsPsych, Videos) {
         autoplay: false,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您认为该视频<b>是</b>或<b>否</b>为<b>深度伪造</b>？</p>`,
         choices: ["是", "否"],
         require_movement: true,
@@ -82,7 +82,7 @@ function getBlock3Procedure(jsPsych, Videos) {
         autoplay: false,
         controls: false,
         width: 1000,
-        stimulus: jsPsych.timelineVariable('VideoArray'),
+        stimulus: jsPsych.evaluateTimelineVariable('Video'),
         prompt: `<p style='font-size:30px'>您对您刚才做出的选择有多大程度的<b>自信</b>？</p>
         <p style='font-size:20px'>如果<b>非常自信</b>，请将滑块移向<b>右侧</b>；如果<b>不确定</b>，请将滑块移向<b>左侧</b>。
         <br>请注意，滑动条最左端为<b>50%</b>，最右端为<b>100%</b>，代表您对刚刚所做判断的<b>程度</b>。</p>`,
@@ -112,3 +112,4 @@ function getBlock3Procedure(jsPsych, Videos) {
 
     return block3_procedure;
 }
+
