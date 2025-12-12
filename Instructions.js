@@ -177,19 +177,8 @@ instructions_2.timeline.push(instruction_manipulationcheck);
 
 var instruction_distractor = {
       type: jsPsychHtmlButtonResponse,
-      stimulus: `<p style="font-size: 35px;line-height: 1.5;">
-      您可以稍事休息一下，然后继续本实验。
-      接下来你将看到一些颜色字词。比如：<br>
-      <p style = 'color:red;font-size:46px;'>Green</p>
-      <p style = 'color:black;font-size:30px;line-height:1.5'>
-    请对颜色做出反应，而忽略文字的含义。<br><br>
-        如果是<span style="font-color:red;">红色</span>，请按“d”键；<br>
-        如果是<span style="font-color:yellow;">黄色</span>，请按“f”键；<br>
-        如果是<span style="font-color:blue;">蓝色</span>，请按“j”键；<br>
-        如果是<span style="font-color:green;">绿色</span>，请按“k”键。<br>
-        比如，在上面的示例中应该按r键<br>
-        <br>如果5秒内没有反应，系统将自动判定为错误。
-        <br>请确保你的反应又快又准。</p>`,
+      stimulus: `<p style="font-size: 30px;line-height: 1.5;">请您在实验过程中，不要打开任何其他程序，保持良好的心态。</p>
+        <br>游戏时间约为2分钟，请尽情享受游戏过程。</p>`,
       choices: ['开始'],
       data: {
           task: 'distractor_instructions',
@@ -206,3 +195,4 @@ var instructions_check = {
     prompt: "<p>请选择您认为正确的答案。</p>",
     record_data: true
     }
+
